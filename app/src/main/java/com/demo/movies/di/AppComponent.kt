@@ -5,7 +5,7 @@ import com.demo.movies.MoviesApp
 import com.demo.movies.api.ApiModule
 import com.demo.movies.network.NetworkModule
 import com.demo.movies.repo.RepoModule
-import com.demo.movies.ui.viewmodel.ViewmodelModule
+import com.demo.movies.ui.viewmodel.ViewModelModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -15,7 +15,7 @@ import dagger.android.AndroidInjector
     modules = [
         AndroidInjectionModule::class,
         ActivityModule::class,
-        ViewmodelModule::class,
+        ViewModelModule::class,
         ApiModule::class,
         NetworkModule::class,
         RepoModule::class

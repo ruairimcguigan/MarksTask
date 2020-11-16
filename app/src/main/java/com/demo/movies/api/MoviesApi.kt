@@ -28,6 +28,4 @@ interface MoviesApi {
         @Path("collection_id") collectionId: String,
         @Query("api_key") apiKey: String
     ): Single<Response<MoviesResponse>>
-
-
 }
