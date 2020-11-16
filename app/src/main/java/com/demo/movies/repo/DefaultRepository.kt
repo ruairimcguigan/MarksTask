@@ -10,6 +10,7 @@ import com.demo.movies.api.ApiResponse.Companion.NOT_FOUND
 import com.demo.movies.api.ApiResponse.Companion.UNAUTHORISED
 import com.demo.movies.api.ApiResponse.HttpErrors
 import com.demo.movies.api.ApiResponse.HttpErrors.InternalError
+import com.demo.movies.api.ApiResponse.Success
 import com.demo.movies.api.MoviesService
 import com.demo.movies.models.MoviesResponse
 import com.demo.movies.threading.DefaultSchedulerProvider
@@ -38,9 +39,7 @@ class DefaultRepository @Inject constructor(
                     override fun onSuccess(response: Response<MoviesResponse>) {
 
                         if (response.isSuccessful) {
-                            paymentResponse.onNext(ApiResponse.Success(
-                                onSuccessResponse(response))
-                            )
+                            paymentResponse.onNext(Success(onSuccessResponse(response)))
                         } else {
                             when (response.code()) {
                                 FORBIDDEN -> paymentResponse.onNext(
@@ -96,8 +95,7 @@ class DefaultRepository @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    private fun onSuccessResponse(response: Response<MoviesResponse>) =
-        response.body()!!
+    private fun onSuccessResponse(response: Response<MoviesResponse>) = response.body()!!
 
     private fun errorBody(response: Response<MoviesResponse>) =
         response.errorBody().toString()

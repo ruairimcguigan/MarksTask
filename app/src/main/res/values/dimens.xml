@@ -1,5 +1,42 @@
 <resources>
+
+    <!--Standardised metrics and keylines as per Material Spec
+   https://material.io/guidelines/layout/metrics-keylines.html#-->
+    <dimen name="grid_0">0dp</dimen>
+    <dimen name="grid_2">2dp</dimen>
+    <dimen name="grid_4">4dp</dimen>
+    <dimen name="grid_5">5dp</dimen>
+    <dimen name="grid_8">8dp</dimen>
+    <dimen name="grid_12">12dp</dimen>
+    <dimen name="grid_10">10dp</dimen>
+    <dimen name="grid_16">16dp</dimen>
+    <dimen name="grid_20">20dp</dimen>
+    <dimen name="grid_24">24dp</dimen>
+    <dimen name="grid_28">28dp</dimen>
+    <dimen name="grid_32">32dp</dimen>
+    <dimen name="grid_36">36dp</dimen>
+    <dimen name="grid_40">40dp</dimen>
+    <dimen name="grid_44">44dp</dimen>
+    <dimen name="grid_48">48dp</dimen>
+    <dimen name="grid_52">52dp</dimen>
+    <dimen name="grid_56">56dp</dimen>
+    <dimen name="grid_60">60dp</dimen>
+    <dimen name="grid_64">64dp</dimen>
+    <dimen name="grid_72">72dp</dimen>
+    <dimen name="grid_76">76dp</dimen>
+    <dimen name="grid_80">80dp</dimen>
+    <dimen name="grid_92">92dp</dimen>
+    <dimen name="grid_96">96dp</dimen>
+
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+
+    <!-- font sizes -->
+    <dimen name="repo_stars_size">16sp</dimen>
+    <dimen name="no_repo_font_size">18sp</dimen>
+    <dimen name="repo_name_font_size">16sp</dimen>
+    <dimen name="repo_description_font_size">12sp</dimen>
+    <dimen name="repo_watchers_font_size">8sp</dimen>
+
 </resources>

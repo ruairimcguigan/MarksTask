@@ -9,8 +9,10 @@ import retrofit2.http.Query
 
 interface MoviesApi {
 
+    // https://api.themoviedb.org/now_playing?api_key=3e817577f0f7d61c25e79d170c7e423e}
+
     // https://api.themoviedb.org/3/movie/now_playing?api_key=<<api_key>>&language=en-US&page=1
-    @GET("/now_playing")
+    @GET("/3/movie/now_playing")
     fun getNowPlaying(
         @Query("api_key") apiKey: String
     ): Single<Response<MoviesResponse>>

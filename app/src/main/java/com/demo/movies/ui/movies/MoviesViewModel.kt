@@ -23,9 +23,13 @@ class MoviesViewModel@Inject constructor(
     disposable,
     networkState
 ) {
-    private val moviesState: MutableLiveData<ApiResponse> = MutableLiveData()
+    internal val moviesState: MutableLiveData<ApiResponse> = MutableLiveData()
 
-    fun getMoviesNowShowing(): MutableLiveData<ApiResponse> {
+    init {
+        getMoviesNowShowing()
+    }
+
+    private fun getMoviesNowShowing() {
 
         if (networkState.isAvailable()) {
             disposable.add(
@@ -36,30 +40,32 @@ class MoviesViewModel@Inject constructor(
 
                         override fun onNext(viewState: ApiResponse) {
                             when (viewState) {
+
                                 is Success -> onRetrieveMoviesSuccess(viewState)
                                 is Error -> handleError(viewState)
 
                                 is Unauthorised -> handleError(viewState)
                                 is Forbidden -> handleError(viewState)
                                 is BadRequest -> handleError(viewState)
-                                is InternalError -> handleError(viewState)
+                                is java.lang.InternalError -> handleError(viewState)
                                 is BadGateway -> handleError(viewState)
                                 is ResourceMoved -> handleError(viewState)
                                 is ResourceNotFound -> handleError(viewState)
                             }
                         }
 
-                        override fun onError(e: Throwable) = Timber.e(
-                            "Error retrieving movies: %s", e.localizedMessage
-                        )
+                        override fun onError(e: Throwable) {
+                            Timber.e("Error retrieving response: %s", e.localizedMessage)
+                        }
 
-                        override fun onComplete() = disposable.dispose()
+                        override fun onComplete() {
+                            disposable.dispose()
+                        }
                     }
                     ))
-        } else{
+        } else {
             _activeNetworkState.value = false
         }
-        return moviesState
     }
 
     private fun onRetrieveMoviesSuccess(response: ApiResponse) = moviesState.postValue(response)
@@ -68,7 +74,7 @@ class MoviesViewModel@Inject constructor(
         is Forbidden -> moviesState.postValue(response)
         is ResourceNotFound -> moviesState.postValue(response)
         is Unauthorised -> moviesState.postValue(response)
-        is HttpErrors.InternalError -> moviesState.postValue(response)
+        is InternalError -> moviesState.postValue(response)
         is BadRequest -> moviesState.postValue(response)
         is BadGateway -> moviesState.postValue(response)
         is ResourceMoved -> moviesState.postValue(response)

@@ -1,41 +1,101 @@
 package com.demo.movies.ui.movies
 
 import android.os.Bundle
-import com.google.android.material.appbar.CollapsingToolbarLayout
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.annotation.StringRes
+import androidx.lifecycle.Observer
 import com.demo.movies.R
+import com.demo.movies.api.ApiResponse
+import com.demo.movies.api.ApiResponse.HttpErrors
+import com.demo.movies.ext.gone
+import com.demo.movies.ext.snack
+import com.demo.movies.ext.toast
+import com.demo.movies.ext.visible
+import com.demo.movies.models.MoviesResponse
+import com.google.android.material.appbar.CollapsingToolbarLayout
+import dagger.android.support.DaggerAppCompatActivity
+import kotlinx.android.synthetic.main.activity_scrolling.*
+import kotlinx.android.synthetic.main.content_scrolling.*
+import javax.inject.Inject
 
-class MoviesActivity : AppCompatActivity() {
+class MoviesActivity : DaggerAppCompatActivity() {
+
+    @Inject lateinit var viewModel: MoviesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scrolling)
         setSupportActionBar(findViewById(R.id.toolbar))
         findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout).title = title
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
+
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewModel.activeNetworkState.observe(
+            this,
+            Observer { isActive ->
+                run {
+                    if (!isActive) {
+                        showNoConnectionSnack(isActive)
+                    }
+                }
+            }
+        )
+        viewModel.moviesState.observe(this, Observer { response ->
+            when (response) {
+                is ApiResponse.Loading -> progressBar.visible()
+                is ApiResponse.Success -> showMovies(response.data)
+                is ApiResponse.Error -> showError(response.error)
+
+                is HttpErrors.Forbidden -> showForbiddenNetworkError()
+                is HttpErrors.ResourceNotFound -> showResourceNotFoundError()
+                is HttpErrors.Unauthorised -> showUnauthorisedError()
+                is HttpErrors.BadRequest -> showBadRequestError()
+                is HttpErrors.BadGateway -> showBadGatewayError()
+                is HttpErrors.InternalError -> showInternalError()
+                is HttpErrors.ResourceMoved -> showResourceMovedError()
+            }
+        })
+    }
+
+    private fun showBadGatewayError() = setErrorViewState(R.string.bad_gateway_message)
+    private fun showInternalError() = setErrorViewState(R.string.internal_error_message)
+    private fun showBadRequestError() = setErrorViewState(R.string.bad_request_message)
+    private fun showResourceNotFoundError() = setErrorViewState(R.string.not_found_error_message)
+    private fun showUnauthorisedError() = setErrorViewState(R.string.unauthorized_error_message)
+    private fun showResourceMovedError() = setErrorViewState(R.string.resource_moved_error_message)
+    private fun showForbiddenNetworkError() = setErrorViewState(R.string.resource_forbidden_error_message)
+
+    private fun showError(message: String) {
+        progressBar.gone()
+        toast(message)
+    }
+
+    private fun setErrorViewState(@StringRes message: Int) {
+        progressBar.gone()
+        toast(String.format(getString(message)))
+    }
+
+    private fun showMovies(movies: MoviesResponse) {
+        TODO("Not yet implemented")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_scrolling, menu)
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-        return when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
+    }
+
+    private fun showNoConnectionSnack(isNetworkAvailable: Boolean) {
+        if (!isNetworkAvailable) {
+            progressBar.gone()
+            getString(R.string.check_connection_message).let { root.snack(it) }
         }
     }
 }
