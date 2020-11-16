@@ -7,5 +7,5 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class ActivityModule {
     @ContributesAndroidInjector
-    abstract fun contributesQRActivity(): MoviesActivity
+    abstract fun contributesMoviesActivity(): MoviesActivity
 }
