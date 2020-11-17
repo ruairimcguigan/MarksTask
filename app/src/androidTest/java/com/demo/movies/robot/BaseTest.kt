@@ -1,11 +1,7 @@
 package com.demo.movies.robot
 
-import androidx.test.espresso.IdlingRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.demo.movies.api.OkHttpProvider
-import com.jakewharton.espresso.OkHttp3IdlingResource
-import org.junit.Before
 import org.junit.runner.RunWith
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
@@ -23,14 +19,14 @@ abstract class BaseTest {
 
     internal fun getString(stringId: Int) = context.resources.getString(stringId)
 
-    @Before
-    open fun setup() {
-        IdlingRegistry.getInstance().register(
-            OkHttp3IdlingResource.create(
-                "okhttp",
-                OkHttpProvider.getOkHttpClient()
-            )
-        )
-    }
+//    @Before
+//    open fun setup() {
+//        IdlingRegistry.getInstance().register(
+//            OkHttp3IdlingResource.create(
+//                "okhttp",
+//                OkHttpProvider.getOkHttpClient()
+//            )
+//        )
+//    }
 
 }

@@ -1,13 +1,15 @@
 package com.demo.movies.test.allmovies
 
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.matcher.ViewMatchers.Visibility.GONE
 import androidx.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE
 import com.demo.movies.R
-import com.demo.movies.R.id.moviesErrorView
-import com.demo.movies.R.id.moviesList
+import com.demo.movies.R.id.*
+import com.demo.movies.api.OkHttpProvider
 import com.demo.movies.robot.BaseTest
 import com.demo.movies.test.allmovies.AllMoviesRobot.Companion.HTTP_OK
 import com.demo.movies.util.ResponseReader.readJson
+import com.jakewharton.espresso.OkHttp3IdlingResource
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -17,9 +19,16 @@ class AllMoviesTest: BaseTest() {
     private val allMoviesRobot = createRobotRunner(AllMoviesRobot::class)
 
     @Before
-    override fun setup() {
+    fun setup() {
         allMoviesRobot {
             startServer()
+
+            IdlingRegistry.getInstance().register(
+                OkHttp3IdlingResource.create(
+                    "okhttp",
+                    OkHttpProvider.getOkHttpClient()
+                )
+            )
         }
     }
 
@@ -48,6 +57,38 @@ class AllMoviesTest: BaseTest() {
             // then
             verifyMoviesState(moviesList, errorView)
             verifyHasData(R.id.moviesList)
+        }
+    }
+
+    @Test
+    fun testFailedIResourceMovedErrorResponse() {
+
+        allMoviesRobot {
+
+            // given
+            val progressBar = Pair(progressBar, VISIBLE)
+            val repoListView = Pair(moviesList, GONE)
+            val noReposView = Pair(moviesErrorView, VISIBLE)
+
+            // when
+            launchActivity()
+
+            getApiResponse(
+                responseCode = 301,
+                responseBody = ""
+            )
+
+            // then
+            verifyMoviesState(
+                progressBar,
+                repoListView,
+                noReposView
+            )
+
+            verifyCorrectErrorMessageShown(
+                viewId = R.id.moviesErrorView,
+                errorValue = "Requested resource has been changed permanently"
+            )
         }
     }
 

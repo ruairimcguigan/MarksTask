@@ -1,12 +1,10 @@
 package com.demo.movies.ui.allmovies
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.StringRes
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.demo.movies.R
 import com.demo.movies.api.ApiResponse
@@ -43,17 +41,18 @@ class AllMoviesActivity : DaggerAppCompatActivity() {
     private fun observeViewModel() {
         viewModel.activeNetworkState.observe(
             this,
-            Observer { isActive ->
+            { isActive ->
                 run {
-                    if (!isActive) {
-                        showNoConnectionSnack(isActive)
-                    } else {
+                    if (isActive) {
                         viewModel.fetchConfiguration()
+                        viewModel.getMoviesNowShowing()
+                    } else {
+                        showNoConnectionSnack(isActive)
                     }
                 }
             }
         )
-        viewModel.moviesState.observe(this, Observer { response ->
+        viewModel.moviesState.observe(this, { response ->
             when (response) {
                 is ApiResponse.Loading -> progressBar.visible()
                 is ApiResponse.Success<*> -> showMovies(response.data as MoviesResponse)
@@ -85,6 +84,7 @@ class AllMoviesActivity : DaggerAppCompatActivity() {
 
     private fun setErrorViewState(@StringRes message: Int) {
         progressBar.gone()
+        moviesList.gone()
         toast(String.format(getString(message)))
     }
 
@@ -94,20 +94,10 @@ class AllMoviesActivity : DaggerAppCompatActivity() {
         moviesList.visible()
 
         adapterAll = AllMoviesAdapter(prefsHelper)
-        val calculateNoOfColumns = calculateNoOfColumns(this, 110f)
-        moviesList.layoutManager = GridLayoutManager(this, calculateNoOfColumns)
+        moviesList.layoutManager = GridLayoutManager(this, 4)
 
         adapterAll.populate(movies.results as ArrayList<Movie>)
         moviesList.adapter = adapterAll
-    }
-
-    fun calculateNoOfColumns(
-        context: Context,
-        columnWidthDp: Float
-    ): Int { // For example columnWidthdp=180
-        val displayMetrics = context.resources.displayMetrics
-        val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
-        return (screenWidthDp / columnWidthDp + 0.5).toInt()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -132,4 +122,6 @@ class AllMoviesActivity : DaggerAppCompatActivity() {
             .putExtra("MOVIE_ID", movieId)
         startActivity(intent)
     }
+
+    // TODO handle select video pass throught to details
 }

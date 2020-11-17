@@ -1,7 +1,7 @@
 package com.demo.movies.ui.moviedetails
 
 import androidx.lifecycle.MutableLiveData
-import com.demo.movies.BuildConfig
+import com.demo.movies.BuildConfig.API_KEY
 import com.demo.movies.api.ApiResponse
 import com.demo.movies.api.ApiResponse.HttpErrors
 import com.demo.movies.api.ApiResponse.Loading
@@ -24,15 +24,16 @@ class MovieDetailsViewModel @Inject constructor(
     disposable,
     networkState
 ) {
-
     internal val moviesDetails: MutableLiveData<ApiResponse> = MutableLiveData()
 
-    private fun getMovieForId() {
+    internal fun getMovieForId(movieId: String): MutableLiveData<ApiResponse> {
 
         if (networkState.isAvailable()) {
             disposable.add(
-                repo.getMovieForId(BuildConfig.API_KEY)
-                    .doOnSubscribe { moviesDetails.postValue(Loading) }
+                repo.getMovieForId(
+                    apiKey = API_KEY,
+                    movieId = movieId
+                ).doOnSubscribe { moviesDetails.postValue(Loading) }
                     .subscribeOn(schedulerProvider.io())
                     .subscribeWith(object : DisposableObserver<ApiResponse>() {
 
@@ -56,14 +57,14 @@ class MovieDetailsViewModel @Inject constructor(
                             Timber.e("Error retrieving response: %s", e.localizedMessage)
                         }
 
-                        override fun onComplete() {
-                            disposable.dispose()
-                        }
+                        override fun onComplete() = disposable.dispose()
                     }
                     ))
         } else {
             _activeNetworkState.value = false
         }
+
+        return moviesDetails
     }
 
     private fun onMovieDetailsSuccess(movies: Movie) {

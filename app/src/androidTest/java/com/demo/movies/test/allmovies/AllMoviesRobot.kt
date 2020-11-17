@@ -66,6 +66,10 @@ class AllMoviesRobot: BaseRobot() {
         assertEquals(POSTER_URL, actual)
     }
 
+    fun verifyCorrectErrorMessageShown(
+        @IntegerRes viewId: Int, errorValue: String) = matchText(viewId, errorValue
+    )
+
     internal fun stopServer() = mockWebServer.shutdown()
 
     companion object {

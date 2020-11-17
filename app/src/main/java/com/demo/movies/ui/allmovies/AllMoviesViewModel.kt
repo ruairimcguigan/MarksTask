@@ -26,13 +26,9 @@ class AllMoviesViewModel@Inject constructor(
 ) {
     internal val moviesState: MutableLiveData<ApiResponse> = MutableLiveData()
 
-    init {
-        getMoviesNowShowing()
-    }
-
     internal fun fetchConfiguration() = repo.getConfiguration(API_KEY)
 
-    private fun getMoviesNowShowing() {
+    internal fun getMoviesNowShowing() {
 
         if (networkState.isAvailable()) {
             disposable.add(
@@ -50,7 +46,7 @@ class AllMoviesViewModel@Inject constructor(
                                 is Unauthorised -> handleError(viewState)
                                 is Forbidden -> handleError(viewState)
                                 is BadRequest -> handleError(viewState)
-                                is java.lang.InternalError -> handleError(viewState)
+                                is ApiResponse.HttpErrors.InternalError -> handleError(viewState)
                                 is BadGateway -> handleError(viewState)
                                 is ResourceMoved -> handleError(viewState)
                                 is ResourceNotFound -> handleError(viewState)

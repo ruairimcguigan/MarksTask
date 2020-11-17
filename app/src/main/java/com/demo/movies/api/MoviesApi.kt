@@ -1,6 +1,7 @@
 package com.demo.movies.api
 
 import com.demo.movies.models.Configuration
+import com.demo.movies.models.Movie
 import com.demo.movies.models.MoviesResponse
 import io.reactivex.Single
 import retrofit2.Response
@@ -27,7 +28,7 @@ interface MoviesApi {
     fun getMovieForId(
         @Path("movie_id") movieId: String,
         @Query("api_key") apiKey: String
-    ): Single<Response<MoviesResponse>>
+    ): Single<Response<Movie>>
 
     // https://api.themoviedb.org/3/collection/{collection_id}?api_key=<<api_key>>&language=en-US
     @GET("/collection/{collection_id}")

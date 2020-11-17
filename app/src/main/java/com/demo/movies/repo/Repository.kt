@@ -12,6 +12,7 @@ interface Repository {
     ): PublishSubject<ApiResponse>
 
     fun getMovieForId(
+        apiKey: String,
         movieId: String
     ): PublishSubject<ApiResponse>
 

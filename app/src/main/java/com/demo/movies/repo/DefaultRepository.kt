@@ -13,6 +13,7 @@ import com.demo.movies.api.ApiResponse.HttpErrors.*
 import com.demo.movies.api.ApiResponse.Success
 import com.demo.movies.api.MoviesService
 import com.demo.movies.models.Configuration
+import com.demo.movies.models.Movie
 import com.demo.movies.models.MoviesResponse
 import com.demo.movies.threading.DefaultSchedulerProvider
 import com.demo.movies.threading.RxDisposable
@@ -32,7 +33,8 @@ class DefaultRepository @Inject constructor(
     private val prefsHelper: PrefsHelper
 ) : Repository {
 
-    val paymentResponse = PublishSubject.create<ApiResponse>()
+    val allMoviesResponse = PublishSubject.create<ApiResponse>()
+    val movieDetailsResponse = PublishSubject.create<ApiResponse>()
 
     override fun getConfiguration(apiKey: String) {
         disposable.add(
@@ -67,58 +69,81 @@ class DefaultRepository @Inject constructor(
                     override fun onSuccess(response: Response<MoviesResponse>) {
 
                         if (response.isSuccessful) {
-                            paymentResponse.onNext(Success(onSuccessResponse(response)))
+                            allMoviesResponse.onNext(Success(onSuccessResponse(response)))
                         } else {
                             handleHttpErrorResponse(response)
                         }
                     }
                     override fun onError(e: Throwable) = Timber.e(
-                        "on payment response error: %s", e.localizedMessage
+                        "on all movies response error: %s", e.localizedMessage
                     )
                 })
         )
 
-        return paymentResponse
+        return allMoviesResponse
     }
 
-    private fun <T: Any>  handleHttpErrorResponse(response: Response<T>) {
-        when (response.code()) {
-            FORBIDDEN -> paymentResponse.onNext(
-                Forbidden(errorBody(response as Response<MoviesResponse>))
-            )
-            NOT_FOUND -> paymentResponse.onNext(
-                ResourceNotFound(errorBody(response as Response<MoviesResponse>))
-            )
-            UNAUTHORISED -> paymentResponse.onNext(
-                Unauthorised(errorBody(response as Response<MoviesResponse>))
-            )
-            INTERNAL_ERROR -> paymentResponse.onNext(
-                InternalError(errorBody(response as Response<MoviesResponse>))
-            )
-            BAD_REQUEST -> paymentResponse.onNext(
-                BadRequest(errorBody(response as Response<MoviesResponse>))
-            )
-            BAD_GATEWAY -> paymentResponse.onNext(
-                BadGateway(errorBody(response as Response<MoviesResponse>))
-            )
-            MOVED -> paymentResponse.onNext(
-                ResourceMoved(errorBody(response as Response<MoviesResponse>))
-            )
-        }
-    }
+    override fun getMovieForId(
+        apiKey: String,
+        movieId: String
+    ): PublishSubject<ApiResponse> {
+        disposable.add(
+            service.getMovieForId(apiKey= apiKey, movieId = movieId)
+                .doFinally{ disposeOnComplete() }
+                .subscribeOn(schedulerProvider.io())
+                .subscribeWith(object : DisposableSingleObserver<Response<Movie>>() {
 
-    override fun getMovieForId(movieId: String): PublishSubject<ApiResponse> {
-        TODO("Not yet implemented")
+                    override fun onSuccess(response: Response<Movie>) {
+                        if (response.isSuccessful) {
+                            movieDetailsResponse.onNext(Success(onSuccessResponse(response)))
+                        } else {
+                            handleHttpErrorResponse(response)
+                        }
+                    }
+
+                    override fun onError(e: Throwable) = Timber.e(
+                        "on movie details response error: %s", e.localizedMessage
+                    )
+
+                }
+        ))
+        return movieDetailsResponse
     }
 
     override fun getCollectionForId(collectionId: String): PublishSubject<ApiResponse> {
         TODO("Not yet implemented")
     }
 
-    private fun onSuccessResponse(response: Response<MoviesResponse>) = response.body()!!
+    private fun <T: Any> onSuccessResponse(response: Response<T>) = response.body()!!
 
-    private fun errorBody(response: Response<MoviesResponse>) =
-        response.errorBody().toString()
+    private fun <T: Any> errorBody(response: Response<T>) = response.errorBody().toString()
+
+    private fun <T: Any>  handleHttpErrorResponse(response: Response<T>) {
+        when (response.code()) {
+            FORBIDDEN -> allMoviesResponse.onNext(
+                Forbidden(errorBody(response as Response<MoviesResponse>))
+            )
+            NOT_FOUND -> allMoviesResponse.onNext(
+                ResourceNotFound(errorBody(response as Response<MoviesResponse>))
+            )
+            UNAUTHORISED -> allMoviesResponse.onNext(
+                Unauthorised(errorBody(response as Response<MoviesResponse>))
+            )
+            INTERNAL_ERROR -> allMoviesResponse.onNext(
+                InternalError(errorBody(response as Response<MoviesResponse>))
+            )
+            BAD_REQUEST -> allMoviesResponse.onNext(
+                BadRequest(errorBody(response as Response<MoviesResponse>))
+            )
+            BAD_GATEWAY -> allMoviesResponse.onNext(
+                BadGateway(errorBody(response as Response<MoviesResponse>))
+            )
+            MOVED -> allMoviesResponse.onNext(
+                ResourceMoved(errorBody(response as Response<MoviesResponse>))
+            )
+        }
+    }
+
 
     private fun storeConfiguration(configuration: Configuration?){
         val baseUrl = configuration?.images?.secureBaseUrl

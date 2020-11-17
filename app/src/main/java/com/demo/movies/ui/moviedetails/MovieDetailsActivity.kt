@@ -33,6 +33,6 @@ class MovieDetailsActivity : DaggerAppCompatActivity() {
 
 
     private fun showMovieDetails(movieId: String) {
-
+        viewModel.getMovieForId(movieId)
     }
 }
