@@ -8,21 +8,20 @@ import com.demo.movies.models.Movie
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.movie_item.view.*
 
-class MoviesViewHolder(view: View): RecyclerView.ViewHolder(view) {
+class AllMoviesViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
-    fun bind(context: Context, movie: Movie){
-
+    fun bind(
+        context: Context,
+        imageUrl: String,
+        movie: Movie
+    ){
         val moviePoster = StringBuilder()
-            .append(imageBase)
+            .append(imageUrl)
             .append(movie.posterPath)
             .toString()
 
         val posterView: ImageView = itemView.poster
         Picasso.with(context).load(moviePoster).into(posterView)
-    }
-
-    companion object {
-        val imageBase = "https://image.tmdb.org/t/p/w300"
     }
 }
 

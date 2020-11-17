@@ -7,7 +7,7 @@ interface Repository {
 
     fun getConfiguration(
         apiKey: String
-    ): PublishSubject<ApiResponse>
+    )
 
     fun getNowShowing(
         apiKey: String

@@ -6,8 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.demo.movies.R
 import com.demo.movies.models.Movie
+import com.demo.movies.util.PrefsHelper
 
-class MoviesAdapter : RecyclerView.Adapter<MoviesViewHolder>() {
+class AllMoviesAdapter constructor(
+  private val prefsHelper: PrefsHelper
+) : RecyclerView.Adapter<AllMoviesViewHolder>() {
 
   private lateinit var context: Context
   private val movies = mutableListOf<Movie>()
@@ -21,17 +24,26 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesViewHolder>() {
   override fun onCreateViewHolder(
     parent: ViewGroup,
     viewType: Int
-  ): MoviesViewHolder {
+  ): AllMoviesViewHolder {
     context = parent.context
-    return MoviesViewHolder(from(parent.context).inflate(
+    return AllMoviesViewHolder(from(parent.context).inflate(
       R.layout.movie_item,
       parent,
       false)
     )
   }
 
-  override fun onBindViewHolder(holder: MoviesViewHolder, position: Int)
-          = holder.bind(context, movies[position])
+  override fun onBindViewHolder(holderAll: AllMoviesViewHolder, position: Int) {
+
+    val imageUrl = prefsHelper.read(context)
+
+    imageUrl?.let {
+      holderAll.bind(
+        context = context,
+        imageUrl = it,
+        movie = movies[position])
+    }
+  }
 
   override fun getItemCount() = movies.size
 }

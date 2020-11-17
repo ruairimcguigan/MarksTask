@@ -16,20 +16,22 @@ import com.demo.movies.ext.toast
 import com.demo.movies.ext.visible
 import com.demo.movies.models.Movie
 import com.demo.movies.models.MoviesResponse
+import com.demo.movies.util.PrefsHelper
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.activity_scrolling.*
+import kotlinx.android.synthetic.main.activity_allmovies.*
 import javax.inject.Inject
 
 
-class MoviesActivity : DaggerAppCompatActivity() {
+class AllMoviesActivity : DaggerAppCompatActivity() {
 
-    @Inject lateinit var viewModel: MoviesViewModel
+    @Inject lateinit var viewModelAll: AllMoviesViewModel
+    @Inject lateinit var prefsHelper: PrefsHelper
 
-    private lateinit var adapter: MoviesAdapter
+    private lateinit var adapterAll: AllMoviesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_scrolling)
+        setContentView(R.layout.activity_allmovies)
 //        setSupportActionBar(findViewById(R.id.toolbar))
 //        findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout).title = title
 
@@ -37,17 +39,19 @@ class MoviesActivity : DaggerAppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        viewModel.activeNetworkState.observe(
+        viewModelAll.activeNetworkState.observe(
             this,
             Observer { isActive ->
                 run {
                     if (!isActive) {
                         showNoConnectionSnack(isActive)
+                    } else {
+                        viewModelAll.fetchConfiguration()
                     }
                 }
             }
         )
-        viewModel.moviesState.observe(this, Observer { response ->
+        viewModelAll.moviesState.observe(this, Observer { response ->
             when (response) {
                 is ApiResponse.Loading -> progressBar.visible()
                 is ApiResponse.Success<*> -> showMovies(response.data as MoviesResponse)
@@ -87,12 +91,12 @@ class MoviesActivity : DaggerAppCompatActivity() {
         progressBar.gone()
         moviesList.visible()
 
-        adapter = MoviesAdapter()
+        adapterAll = AllMoviesAdapter(prefsHelper)
         val calculateNoOfColumns = calculateNoOfColumns(this, 110f)
-        moviesList.layoutManager = GridLayoutManager(this, calculateNoOfColumns)
+        moviesList.layoutManager = GridLayoutManager(this, 4)
 
-        adapter.populate(movies.results as ArrayList<Movie>)
-        moviesList.adapter = adapter
+        adapterAll.populate(movies.results as ArrayList<Movie>)
+        moviesList.adapter = adapterAll
     }
 
     fun calculateNoOfColumns(

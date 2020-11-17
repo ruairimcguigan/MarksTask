@@ -5,6 +5,7 @@ import com.demo.movies.BuildConfig.API_KEY
 import com.demo.movies.api.ApiResponse
 import com.demo.movies.api.ApiResponse.*
 import com.demo.movies.api.ApiResponse.HttpErrors.*
+import com.demo.movies.models.Configuration
 import com.demo.movies.models.MoviesResponse
 import com.demo.movies.network.NetworkState
 import com.demo.movies.repo.Repository
@@ -15,7 +16,7 @@ import io.reactivex.observers.DisposableObserver
 import timber.log.Timber
 import javax.inject.Inject
 
-class MoviesViewModel@Inject constructor(
+class AllMoviesViewModel@Inject constructor(
     private val repo: Repository,
     private val schedulerProvider: DefaultSchedulerProvider,
     private val networkState: NetworkState,
@@ -30,6 +31,12 @@ class MoviesViewModel@Inject constructor(
         getMoviesNowShowing()
     }
 
+    internal fun fetchConfiguration() = repo.getConfiguration(API_KEY)
+
+    private fun storedConfiguration(configuration: Configuration) {
+        TODO("Not yet implemented")
+    }
+
     private fun getMoviesNowShowing() {
 
         if (networkState.isAvailable()) {
@@ -40,8 +47,8 @@ class MoviesViewModel@Inject constructor(
                     .subscribeWith(object : DisposableObserver<ApiResponse>() {
 
                         override fun onNext(viewState: ApiResponse) {
-                            when (viewState) {
 
+                            when (viewState) {
                                 is Success<*> -> onRetrieveMoviesSuccess(viewState.data as MoviesResponse)
                                 is Error -> handleError(viewState)
 

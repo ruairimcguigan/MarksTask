@@ -6,20 +6,20 @@ import javax.inject.Inject
 
 class PrefsHelper @Inject constructor() {
 
-    fun read(context: Context):Boolean = context
+    fun read(context: Context): String? = context
         .getSharedPreferences(PREF_NAME, MODE_PRIVATE)
-        .getBoolean(HAS_SUBMITTED_CREDENTIALS, false)
+        .getString(IMAGE_PATH, null)
 
-    fun write(context: Context, hasSubmitted: Boolean) {
+    fun write(context: Context, imagePath: String) {
         val sharedPref = context.getSharedPreferences(PREF_NAME, MODE_PRIVATE) ?: return
         with(sharedPref.edit()) {
-            putBoolean(HAS_SUBMITTED_CREDENTIALS, hasSubmitted)
+            putString(IMAGE_PATH, imagePath)
             commit()
         }
     }
 
     companion object {
         const val PREF_NAME = "prefs"
-        const val HAS_SUBMITTED_CREDENTIALS = "credentialsSubmitted"
+        const val IMAGE_PATH = "imageUrl"
     }
 }
