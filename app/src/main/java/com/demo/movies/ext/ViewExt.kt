@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import android.view.View.*
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 
 fun View.visible() : View {
@@ -36,4 +37,11 @@ fun View.snack(
 
 fun Context.toast(message: String) {
   Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+}
+
+fun <T : RecyclerView.ViewHolder> T.listen(event: (position: Int, type: Int) -> Unit): T {
+  itemView.setOnClickListener {
+    event.invoke(adapterPosition, itemViewType)
+  }
+  return this
 }

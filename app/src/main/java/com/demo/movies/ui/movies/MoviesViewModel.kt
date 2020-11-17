@@ -5,6 +5,7 @@ import com.demo.movies.BuildConfig.API_KEY
 import com.demo.movies.api.ApiResponse
 import com.demo.movies.api.ApiResponse.*
 import com.demo.movies.api.ApiResponse.HttpErrors.*
+import com.demo.movies.models.MoviesResponse
 import com.demo.movies.network.NetworkState
 import com.demo.movies.repo.Repository
 import com.demo.movies.threading.DefaultSchedulerProvider
@@ -41,7 +42,7 @@ class MoviesViewModel@Inject constructor(
                         override fun onNext(viewState: ApiResponse) {
                             when (viewState) {
 
-                                is Success -> onRetrieveMoviesSuccess(viewState)
+                                is Success -> onRetrieveMoviesSuccess(viewState.data as MoviesResponse)
                                 is Error -> handleError(viewState)
 
                                 is Unauthorised -> handleError(viewState)
@@ -68,7 +69,9 @@ class MoviesViewModel@Inject constructor(
         }
     }
 
-    private fun onRetrieveMoviesSuccess(response: ApiResponse) = moviesState.postValue(response)
+    private fun onRetrieveMoviesSuccess(response: MoviesResponse) {
+        moviesState.postValue(response.let { Success(it) })
+    }
 
     private fun handleError(response: ApiResponse) = when (response) {
         is Forbidden -> moviesState.postValue(response)

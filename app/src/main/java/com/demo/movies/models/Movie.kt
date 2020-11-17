@@ -2,7 +2,7 @@ package com.demo.movies.models
 
 import com.google.gson.annotations.SerializedName
 
-data class ResultsItem(
+data class Movie(
     @SerializedName("overview")
     val overview: String = "",
     @SerializedName("original_language")

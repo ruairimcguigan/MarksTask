@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.StringRes
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import com.demo.movies.R
 import com.demo.movies.api.ApiResponse
 import com.demo.movies.api.ApiResponse.HttpErrors
@@ -12,22 +13,24 @@ import com.demo.movies.ext.gone
 import com.demo.movies.ext.snack
 import com.demo.movies.ext.toast
 import com.demo.movies.ext.visible
+import com.demo.movies.models.Movie
 import com.demo.movies.models.MoviesResponse
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_scrolling.*
-import kotlinx.android.synthetic.main.content_scrolling.*
 import javax.inject.Inject
+
 
 class MoviesActivity : DaggerAppCompatActivity() {
 
     @Inject lateinit var viewModel: MoviesViewModel
 
+    private lateinit var adapter: MoviesAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scrolling)
-        setSupportActionBar(findViewById(R.id.toolbar))
-        findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout).title = title
+//        setSupportActionBar(findViewById(R.id.toolbar))
+//        findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout).title = title
 
         observeViewModel()
     }
@@ -79,7 +82,15 @@ class MoviesActivity : DaggerAppCompatActivity() {
     }
 
     private fun showMovies(movies: MoviesResponse) {
-        TODO("Not yet implemented")
+
+        progressBar.gone()
+        moviesList.visible()
+
+        adapter = MoviesAdapter()
+        moviesList.layoutManager = GridLayoutManager(this, 4)
+
+        adapter.populate(movies.results as ArrayList<Movie>)
+        moviesList.adapter = adapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -97,5 +108,9 @@ class MoviesActivity : DaggerAppCompatActivity() {
             progressBar.gone()
             getString(R.string.check_connection_message).let { root.snack(it) }
         }
+    }
+
+    companion object {
+        val imageBase = "https://image.tmdb.org/t/p/w500"
     }
 }

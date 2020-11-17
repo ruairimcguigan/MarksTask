@@ -20,7 +20,7 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
-            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/movie/\""
+            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/\""
             buildConfigField "String", "API_KEY", '"3e817577f0f7d61c25e79d170c7e423e"'
             debuggable true
         }
