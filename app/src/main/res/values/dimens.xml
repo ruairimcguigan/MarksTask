@@ -33,10 +33,6 @@
     <dimen name="text_margin">16dp</dimen>
 
     <!-- font sizes -->
-    <dimen name="repo_stars_size">16sp</dimen>
-    <dimen name="no_repo_font_size">18sp</dimen>
-    <dimen name="repo_name_font_size">16sp</dimen>
-    <dimen name="repo_description_font_size">12sp</dimen>
-    <dimen name="repo_watchers_font_size">8sp</dimen>
+    <dimen name="no_movie_font_size">18sp</dimen>
 
 </resources>

@@ -17,10 +17,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/moviesErrorView"
+        android:layout_width="@dimen/grid_0"
+        android:layout_height="@dimen/grid_0"
+        android:textSize="@dimen/no_movie_font_size"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="No mvoies found available" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="@dimen/grid_60"
         android:layout_height="@dimen/grid_60"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

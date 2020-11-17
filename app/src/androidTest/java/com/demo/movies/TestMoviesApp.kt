@@ -1,6 +1,7 @@
 package com.demo.movies
 
 class TestMoviesApp: MoviesApp() {
+
     override fun getBaseUrl(): String = "http://127.0.0.1:8080"
 
     override fun onCreate() {

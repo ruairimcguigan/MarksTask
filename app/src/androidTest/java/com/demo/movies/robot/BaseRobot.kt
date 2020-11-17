@@ -1,10 +1,12 @@
-package com.demo.movies.testrobot
+package com.demo.movies.robot
 
 import android.app.Activity
 import android.content.Context
 import androidx.annotation.IntegerRes
 import androidx.annotation.StringRes
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
@@ -13,10 +15,9 @@ import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import com.demo.movies.util.PrefsHelper
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.not
+import org.hamcrest.Matchers.*
 
-open class TestRobot {
+open class BaseRobot {
 
     protected fun context(): Context = InstrumentationRegistry.getInstrumentation().targetContext
 
@@ -81,6 +82,14 @@ open class TestRobot {
         )
     }
 
+    fun hasItems() = ViewAssertion { view, noViewFoundException ->
+        if (view is RecyclerView) {
+            assertThat(view.adapter?.itemCount, greaterThan(0))
+        } else {
+            throw noViewFoundException
+        }
+    }
+
     protected fun resetAppStateBetweenTests() {
         androidx.test.InstrumentationRegistry.getTargetContext()
             .getSharedPreferences(
@@ -88,7 +97,7 @@ open class TestRobot {
                 Context.MODE_PRIVATE
             )
             .edit()
-            .putBoolean(PrefsHelper.HAS_SUBMITTED_CREDENTIALS, false)
+            .putBoolean(PrefsHelper.IMAGE_PATH, false)
             .apply();
     }
 
