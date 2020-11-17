@@ -28,9 +28,8 @@
     <dimen name="grid_92">92dp</dimen>
     <dimen name="grid_96">96dp</dimen>
 
-    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="app_bar_height">240dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="text_margin">16dp</dimen>
 
     <!-- font sizes -->
     <dimen name="no_movie_font_size">18sp</dimen>

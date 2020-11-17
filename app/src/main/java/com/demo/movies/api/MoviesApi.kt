@@ -1,6 +1,7 @@
 package com.demo.movies.api
 
 import com.demo.movies.models.Configuration
+import com.demo.movies.models.Constituent
 import com.demo.movies.models.Movie
 import com.demo.movies.models.MoviesResponse
 import io.reactivex.Single
@@ -24,16 +25,16 @@ interface MoviesApi {
     ): Single<Response<MoviesResponse>>
 
     // https://api.themoviedb.org/3/movie/{movie_id}?api_key=<<api_key>>&language=en-US
-    @GET("/movie/{movie_id}")
+    @GET("/3/movie/{movie_id}")
     fun getMovieForId(
         @Path("movie_id") movieId: String,
         @Query("api_key") apiKey: String
     ): Single<Response<Movie>>
 
-    // https://api.themoviedb.org/3/collection/{collection_id}?api_key=<<api_key>>&language=en-US
-    @GET("/collection/{collection_id}")
+    // https://api.themoviedb.org/3/collection/10?api_key=3e817577f0f7d61c25e79d170c7e423e
+    @GET("/3/collection/{collection_id}")
     fun getCollectionForId(
         @Path("collection_id") collectionId: String,
         @Query("api_key") apiKey: String
-    ): Single<Response<MoviesResponse>>
+    ): Single<Response<Constituent>>
 }

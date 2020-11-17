@@ -1,16 +1,26 @@
 package com.demo.movies.models
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
 data class MoviesResponse(
     @SerializedName("dates")
-    val dates: Dates,
+    var dates: Dates = Dates(),
     @SerializedName("page")
-    val page: Int,
+    var page: Int = 0,
     @SerializedName("total_pages")
-    val totalPages: Int,
+    var totalPages: Int = 0,
     @SerializedName("results")
-    val results: List<Movie>?,
+    var results: List<Movie>? = listOf(),
     @SerializedName("total_results")
-    val totalResults: Int
+    var totalResults: Int = 0
 )
+
+@Parcelize
+data class Dates(
+    @SerializedName("maximum")
+    val maximum: String = "",
+    @SerializedName("minimum")
+    val minimum: String = ""
+): Parcelable

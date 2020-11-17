@@ -1,7 +1,7 @@
-package com.demo.movies.test.allmovies
+package com.demo.movies.tests.allmovies
 
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.preference.PreferenceManager.getDefaultSharedPreferences
 import androidx.annotation.IntegerRes
 import androidx.test.InstrumentationRegistry
 import androidx.test.espresso.intent.rule.IntentsTestRule
@@ -60,14 +60,17 @@ class AllMoviesRobot: BaseRobot() {
     internal fun verifyMoviesState(vararg views: Pair<Int, Visibility>) = verifyViewStatesVisibility(*views)
 
     internal fun verifyImagePathIsStoredToSharedPrefs(){
-        val actual = context()
-            .getSharedPreferences(PREF_NAME, MODE_PRIVATE)
-            .getString(IMAGE_PATH, null)
+        val actual = getDefaultSharedPreferences(context()).getString(IMAGE_PATH, "")
         assertEquals(POSTER_URL, actual)
     }
 
     fun verifyCorrectErrorMessageShown(
         @IntegerRes viewId: Int, errorValue: String) = matchText(viewId, errorValue
+    )
+
+    fun verifyHttpErrorToastIsDisplaying(message: String)  = verifyToast(
+        activityRule.activity,
+        message
     )
 
     internal fun stopServer() = mockWebServer.shutdown()

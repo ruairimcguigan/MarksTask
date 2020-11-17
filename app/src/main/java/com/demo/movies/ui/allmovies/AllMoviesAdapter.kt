@@ -6,11 +6,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.demo.movies.R
 import com.demo.movies.models.Movie
+import com.demo.movies.util.ImgPathBuilder
 import com.demo.movies.util.PrefsHelper
 
-class AllMoviesAdapter constructor(
+class AllMoviesAdapter(
   val movieListener: (Movie) -> Unit,
-  private val prefsHelper: PrefsHelper
+  private val prefsHelper: PrefsHelper,
+  private val pathBuilder: ImgPathBuilder
 ) : RecyclerView.Adapter<AllMoviesViewHolder>() {
 
   private lateinit var context: Context
@@ -36,13 +38,13 @@ class AllMoviesAdapter constructor(
 
   override fun onBindViewHolder(holder: AllMoviesViewHolder, position: Int) {
 
-    val imageUrl = prefsHelper.read(context)
+    val imageUrl = prefsHelper.read()
 
     imageUrl?.let {
       holder.bind(
         context = context,
         movieListener = movieListener,
-        imageUrl = it,
+        pathBuilder,
         movie = movies[position])
     }
   }

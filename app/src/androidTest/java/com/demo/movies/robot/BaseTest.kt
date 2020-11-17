@@ -18,15 +18,4 @@ abstract class BaseTest {
     }
 
     internal fun getString(stringId: Int) = context.resources.getString(stringId)
-
-//    @Before
-//    open fun setup() {
-//        IdlingRegistry.getInstance().register(
-//            OkHttp3IdlingResource.create(
-//                "okhttp",
-//                OkHttpProvider.getOkHttpClient()
-//            )
-//        )
-//    }
-
 }

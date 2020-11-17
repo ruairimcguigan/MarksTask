@@ -48,6 +48,7 @@ ext {
     testOrchestratorVersion = '1.3.0'
     jsonVersion = '20200518'
     androidArchVersion = '2.1.0'
+    reactiveStreamsVersion = '1.1.1'
 
     appUiDependencies = [
 
@@ -95,6 +96,7 @@ ext {
             idlingResource:             "com.jakewharton.espresso:okhttp3-idling-resource:${idlingResourceVersion}",
             espressoIntents:            "androidx.test.espresso:espresso-intents:${espressoIntentVersion}",
             testOrchestrator:           "androidx.test:orchestrator:${testOrchestratorVersion}",
-            json:                       "org.json:json:${jsonVersion}"
+            json:                       "org.json:json:${jsonVersion}",
+            reactiveStreams:            "android.arch.lifecycle:reactivestreams:${reactiveStreamsVersion}"
     ]
 }

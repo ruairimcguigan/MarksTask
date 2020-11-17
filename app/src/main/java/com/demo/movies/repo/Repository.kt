@@ -11,12 +11,8 @@ interface Repository {
         apiKey: String
     ): PublishSubject<ApiResponse>
 
-    fun getMovieForId(
-        apiKey: String,
-        movieId: String
-    ): PublishSubject<ApiResponse>
-
     fun getCollectionForId(
+        apiKey: String,
         collectionId: String
     ): PublishSubject<ApiResponse>
 }

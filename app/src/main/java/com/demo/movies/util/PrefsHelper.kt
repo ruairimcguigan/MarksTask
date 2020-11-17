@@ -1,17 +1,16 @@
 package com.demo.movies.util
 
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
+import android.app.Application
+import android.preference.PreferenceManager.getDefaultSharedPreferences
 import javax.inject.Inject
 
-class PrefsHelper @Inject constructor() {
+class PrefsHelper @Inject constructor(val application: Application) {
 
-    fun read(context: Context): String? = context
-        .getSharedPreferences(PREF_NAME, MODE_PRIVATE)
-        .getString(IMAGE_PATH, null)
+    fun read(): String?
+            = getDefaultSharedPreferences(application).getString(IMAGE_PATH, null)
 
-    fun write(context: Context, imagePath: String) {
-        val sharedPref = context.getSharedPreferences(PREF_NAME, MODE_PRIVATE) ?: return
+    fun write(imagePath: String) {
+        val sharedPref = getDefaultSharedPreferences(application) ?: return
         with(sharedPref.edit()) {
             putString(IMAGE_PATH, imagePath)
             commit()

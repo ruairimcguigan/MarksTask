@@ -61,7 +61,7 @@ open class BaseRobot {
         }
     }
 
-    protected fun getResourceString(@StringRes id: Int): String {
+    internal fun getResourceString(@StringRes id: Int): String {
         val targetContext: Context = androidx.test.InstrumentationRegistry.getTargetContext()
         return targetContext.resources.getString(id)
     }

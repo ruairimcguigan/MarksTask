@@ -1,5 +1,6 @@
 package com.demo.movies.ui.viewmodel
 
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,15 +11,11 @@ import timber.log.Timber
 abstract class BaseViewModel constructor(
     val disposable: RxDisposable,
     private val networkState: NetworkState
-): ViewModel() {
+): ViewModel(), LifecycleObserver {
 
-    internal val _activeNetworkState: MutableLiveData<Boolean> = MutableLiveData()
+    private val _activeNetworkState: MutableLiveData<Boolean> = MutableLiveData()
     val activeNetworkState: LiveData<Boolean>
         get() = _activeNetworkState
-
-    init {
-        confirmNetworkState()
-    }
 
     internal fun confirmNetworkState() {
         if (networkState.isAvailable()) {
