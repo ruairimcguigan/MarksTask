@@ -1,5 +1,6 @@
 package com.demo.movies.ui.movies
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -87,10 +88,20 @@ class MoviesActivity : DaggerAppCompatActivity() {
         moviesList.visible()
 
         adapter = MoviesAdapter()
-        moviesList.layoutManager = GridLayoutManager(this, 4)
+        val calculateNoOfColumns = calculateNoOfColumns(this, 110f)
+        moviesList.layoutManager = GridLayoutManager(this, calculateNoOfColumns)
 
         adapter.populate(movies.results as ArrayList<Movie>)
         moviesList.adapter = adapter
+    }
+
+    fun calculateNoOfColumns(
+        context: Context,
+        columnWidthDp: Float
+    ): Int { // For example columnWidthdp=180
+        val displayMetrics = context.resources.displayMetrics
+        val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
+        return (screenWidthDp / columnWidthDp + 0.5).toInt()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -108,9 +119,5 @@ class MoviesActivity : DaggerAppCompatActivity() {
             progressBar.gone()
             getString(R.string.check_connection_message).let { root.snack(it) }
         }
-    }
-
-    companion object {
-        val imageBase = "https://image.tmdb.org/t/p/w500"
     }
 }
