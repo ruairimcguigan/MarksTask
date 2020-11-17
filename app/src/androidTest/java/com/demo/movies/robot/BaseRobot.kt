@@ -19,7 +19,7 @@ import org.hamcrest.Matchers.*
 
 open class BaseRobot {
 
-    protected fun context(): Context = InstrumentationRegistry.getInstrumentation().targetContext
+    internal fun context(): Context = InstrumentationRegistry.getInstrumentation().targetContext
 
     fun typeTextCloseKeyboard(
         @StringRes viewId: Int,

@@ -5,9 +5,7 @@ import io.reactivex.subjects.PublishSubject
 
 interface Repository {
 
-    fun getConfiguration(
-        apiKey: String
-    )
+    fun getConfiguration(apiKey: String)
 
     fun getNowShowing(
         apiKey: String

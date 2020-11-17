@@ -41,11 +41,11 @@ class DefaultRepository @Inject constructor(
                 .subscribeOn(schedulerProvider.io())
                 .subscribeWith(object : DisposableSingleObserver<Response<Configuration>>() {
 
-                    override fun onSuccess(t: Response<Configuration>) {
-                        if (t.isSuccessful){
-                            storeConfiguration(t.body())
+                    override fun onSuccess(config: Response<Configuration>) {
+                        if (config.isSuccessful){
+                            storeConfiguration(config.body())
                         } else {
-                            handleHttpErrorResponse(t)
+                            handleHttpErrorResponse(config)
                         }
                     }
 

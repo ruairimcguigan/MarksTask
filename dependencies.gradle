@@ -75,12 +75,7 @@ ext {
             gson:                        "com.google.code.gson:gson:${gsonVersion}",
             lifecycleExtensions:         "androidx.lifecycle:lifecycle-extensions:${lifecycleVersion}",
             viewmodelExtensions:         "androidx.lifecycle:lifecycle-viewmodel-ktx:${viewmodelVersion}",
-            cameraX:                     "androidx.camera:camera-camera2:${cameraxVersion}",
-            cameraXLifecycle:            "androidx.camera:camera-lifecycle:${cameraxVersion}",
             picasso:                     "com.squareup.picasso:picasso:${picassoVersion}",
-            camerView:                   "androidx.camera:camera-view:${cameraXView}",
-            zxing:                       "com.google.zxing:core:${zxingVersion}",
-            jetSec:                      "androidx.security:security-crypto:${jetSecVersion}"
     ]
 
     appTestDependencies = [

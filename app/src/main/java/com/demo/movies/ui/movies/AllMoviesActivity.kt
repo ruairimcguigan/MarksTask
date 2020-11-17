@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 class AllMoviesActivity : DaggerAppCompatActivity() {
 
-    @Inject lateinit var viewModelAll: AllMoviesViewModel
+    @Inject lateinit var viewModel: AllMoviesViewModel
     @Inject lateinit var prefsHelper: PrefsHelper
 
     private lateinit var adapterAll: AllMoviesAdapter
@@ -39,19 +39,19 @@ class AllMoviesActivity : DaggerAppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        viewModelAll.activeNetworkState.observe(
+        viewModel.activeNetworkState.observe(
             this,
             Observer { isActive ->
                 run {
                     if (!isActive) {
                         showNoConnectionSnack(isActive)
                     } else {
-                        viewModelAll.fetchConfiguration()
+                        viewModel.fetchConfiguration()
                     }
                 }
             }
         )
-        viewModelAll.moviesState.observe(this, Observer { response ->
+        viewModel.moviesState.observe(this, Observer { response ->
             when (response) {
                 is ApiResponse.Loading -> progressBar.visible()
                 is ApiResponse.Success<*> -> showMovies(response.data as MoviesResponse)

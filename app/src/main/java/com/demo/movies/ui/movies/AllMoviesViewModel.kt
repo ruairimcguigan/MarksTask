@@ -5,7 +5,6 @@ import com.demo.movies.BuildConfig.API_KEY
 import com.demo.movies.api.ApiResponse
 import com.demo.movies.api.ApiResponse.*
 import com.demo.movies.api.ApiResponse.HttpErrors.*
-import com.demo.movies.models.Configuration
 import com.demo.movies.models.MoviesResponse
 import com.demo.movies.network.NetworkState
 import com.demo.movies.repo.Repository
@@ -32,10 +31,6 @@ class AllMoviesViewModel@Inject constructor(
     }
 
     internal fun fetchConfiguration() = repo.getConfiguration(API_KEY)
-
-    private fun storedConfiguration(configuration: Configuration) {
-        TODO("Not yet implemented")
-    }
 
     private fun getMoviesNowShowing() {
 

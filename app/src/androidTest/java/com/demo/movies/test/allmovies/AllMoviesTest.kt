@@ -24,7 +24,14 @@ class AllMoviesTest: BaseTest() {
     }
 
     @Test
-    fun onLaunch() {
+    fun shouldFetchAndStoreImagePath() {
+        allMoviesRobot {
+            verifyImagePathIsStoredToSharedPrefs()
+        }
+    }
+
+    @Test
+    fun shouldFetchAndDisplayMovies() {
         allMoviesRobot {
             // given
             val moviesList = Pair(moviesList, VISIBLE)
@@ -41,7 +48,6 @@ class AllMoviesTest: BaseTest() {
             // then
             verifyMoviesState(moviesList, errorView)
             verifyHasData(R.id.moviesList)
-            fetchAndStoreConfiguration()
         }
     }
 
