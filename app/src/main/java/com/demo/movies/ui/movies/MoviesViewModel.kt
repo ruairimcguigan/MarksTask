@@ -42,7 +42,7 @@ class MoviesViewModel@Inject constructor(
                         override fun onNext(viewState: ApiResponse) {
                             when (viewState) {
 
-                                is Success -> onRetrieveMoviesSuccess(viewState.data as MoviesResponse)
+                                is Success<*> -> onRetrieveMoviesSuccess(viewState.data as MoviesResponse)
                                 is Error -> handleError(viewState)
 
                                 is Unauthorised -> handleError(viewState)

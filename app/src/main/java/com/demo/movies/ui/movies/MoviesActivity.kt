@@ -50,7 +50,7 @@ class MoviesActivity : DaggerAppCompatActivity() {
         viewModel.moviesState.observe(this, Observer { response ->
             when (response) {
                 is ApiResponse.Loading -> progressBar.visible()
-                is ApiResponse.Success -> showMovies(response.data)
+                is ApiResponse.Success<*> -> showMovies(response.data as MoviesResponse)
                 is ApiResponse.Error -> showError(response.error)
 
                 is HttpErrors.Forbidden -> showForbiddenNetworkError()

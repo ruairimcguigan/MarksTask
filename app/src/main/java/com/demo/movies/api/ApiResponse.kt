@@ -1,10 +1,8 @@
 package com.demo.movies.api
 
-import com.demo.movies.models.MoviesResponse
-
 sealed class ApiResponse {
 
-    data class Success(val data: MoviesResponse) : ApiResponse()
+    data class Success<out T>(val data: T) : ApiResponse()
     object Loading : ApiResponse()
     data class Error(val error: String) : ApiResponse()
 
