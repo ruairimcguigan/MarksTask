@@ -1,6 +1,7 @@
-package com.demo.movies.ui.movies
+package com.demo.movies.ui.allmovies
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -16,6 +17,7 @@ import com.demo.movies.ext.toast
 import com.demo.movies.ext.visible
 import com.demo.movies.models.Movie
 import com.demo.movies.models.MoviesResponse
+import com.demo.movies.ui.moviedetails.MovieDetailsActivity
 import com.demo.movies.util.PrefsHelper
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_allmovies.*
@@ -93,7 +95,7 @@ class AllMoviesActivity : DaggerAppCompatActivity() {
 
         adapterAll = AllMoviesAdapter(prefsHelper)
         val calculateNoOfColumns = calculateNoOfColumns(this, 110f)
-        moviesList.layoutManager = GridLayoutManager(this, 4)
+        moviesList.layoutManager = GridLayoutManager(this, calculateNoOfColumns)
 
         adapterAll.populate(movies.results as ArrayList<Movie>)
         moviesList.adapter = adapterAll
@@ -114,7 +116,7 @@ class AllMoviesActivity : DaggerAppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-            R.id.action_settings -> true
+        R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
     }
 
@@ -123,5 +125,11 @@ class AllMoviesActivity : DaggerAppCompatActivity() {
             progressBar.gone()
             getString(R.string.check_connection_message).let { root.snack(it) }
         }
+    }
+
+    private fun launchMovieDetails(movieId: String){
+        val intent = Intent(this, MovieDetailsActivity::class.java)
+            .putExtra("MOVIE_ID", movieId)
+        startActivity(intent)
     }
 }

@@ -1,4 +1,4 @@
-package com.demo.movies.ui.movies
+package com.demo.movies.ui.allmovies
 
 import androidx.lifecycle.MutableLiveData
 import com.demo.movies.BuildConfig.API_KEY

@@ -9,7 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.Visibility
 import androidx.test.rule.ActivityTestRule
 import com.demo.movies.robot.BaseRobot
 import com.demo.movies.rules.DisableAnimationsRule
-import com.demo.movies.ui.movies.AllMoviesActivity
+import com.demo.movies.ui.allmovies.AllMoviesActivity
 import junit.framework.Assert.assertEquals
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse

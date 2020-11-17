@@ -1,4 +1,4 @@
-package com.demo.movies.ui.movies
+package com.demo.movies.ui.allmovies
 
 import android.content.Context
 import android.view.LayoutInflater.from
