@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.GridLayoutManager
 import com.demo.movies.R
@@ -93,11 +94,16 @@ class AllMoviesActivity : DaggerAppCompatActivity() {
         progressBar.gone()
         moviesList.visible()
 
-        adapterAll = AllMoviesAdapter(prefsHelper)
+        adapterAll = AllMoviesAdapter(
+            prefsHelper = prefsHelper,
+            movieListener = { partItem: Movie -> onMovieSelected(partItem) }
+        )
+        moviesList.adapter = adapterAll
+
         moviesList.layoutManager = GridLayoutManager(this, 4)
 
         adapterAll.populate(movies.results as ArrayList<Movie>)
-        moviesList.adapter = adapterAll
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -117,11 +123,14 @@ class AllMoviesActivity : DaggerAppCompatActivity() {
         }
     }
 
+    private fun onMovieSelected(movie : Movie) {
+        Toast.makeText(this, "Selected: ${movie.id}", Toast.LENGTH_LONG).show()
+        launchMovieDetails(movieId = movie.id.toString())
+    }
+
     private fun launchMovieDetails(movieId: String){
         val intent = Intent(this, MovieDetailsActivity::class.java)
             .putExtra("MOVIE_ID", movieId)
         startActivity(intent)
     }
-
-    // TODO handle select video pass throught to details
 }

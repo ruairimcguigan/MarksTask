@@ -12,6 +12,7 @@ class AllMoviesViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
     fun bind(
         context: Context,
+        movieListener: (Movie) -> Unit,
         imageUrl: String,
         movie: Movie
     ){
@@ -22,6 +23,7 @@ class AllMoviesViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
         val posterView: ImageView = itemView.poster
         Picasso.with(context).load(moviePoster).into(posterView)
+        itemView.setOnClickListener { movieListener(movie)}
     }
 }
 

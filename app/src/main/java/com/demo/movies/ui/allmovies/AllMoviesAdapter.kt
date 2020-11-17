@@ -9,6 +9,7 @@ import com.demo.movies.models.Movie
 import com.demo.movies.util.PrefsHelper
 
 class AllMoviesAdapter constructor(
+  val movieListener: (Movie) -> Unit,
   private val prefsHelper: PrefsHelper
 ) : RecyclerView.Adapter<AllMoviesViewHolder>() {
 
@@ -33,13 +34,14 @@ class AllMoviesAdapter constructor(
     )
   }
 
-  override fun onBindViewHolder(holderAll: AllMoviesViewHolder, position: Int) {
+  override fun onBindViewHolder(holder: AllMoviesViewHolder, position: Int) {
 
     val imageUrl = prefsHelper.read(context)
 
     imageUrl?.let {
-      holderAll.bind(
+      holder.bind(
         context = context,
+        movieListener = movieListener,
         imageUrl = it,
         movie = movies[position])
     }
