@@ -46,7 +46,10 @@ android {
         }
     }
 
-//    useLibrary 'android.test.runner'
+    android.sourceSets.all {
+        java.srcDir("src/$name/kotlin")
+    }
+
     useLibrary 'android.test.base'
     useLibrary 'android.test.mock'
 }
@@ -114,6 +117,9 @@ dependencies {
     androidTestImplementation appTestDependencies.androidRules
     androidTestImplementation appTestDependencies.androidTestRunner
     androidTestImplementation appTestDependencies.espressoIntents
+
+    // UIAutomator
+    implementation "androidx.test.uiautomator:uiautomator:2.2.0"
 
     // AndroidX Test Orchestrator
     androidTestUtil appTestDependencies.testOrchestrator
