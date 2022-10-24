@@ -36,9 +36,9 @@ ext {
     // Testing
     jUnitVersion = '4.13'
     espressoVersion = '3.2.0'
-    mockitoVersion = '2.25.1'
+    mockitoVersion = '3.10.0'
     mockitoInlineVersion = '2.13.0'
-    mockitoAndroidVersion = '2.8.9'
+    mockitoAndroidVersion = '3.10.0'
     androidSupportRunnerVersion = '1.0.0'
     androidSupportRulesVersion = '1.0.0'
     androidXCoreVersion = '1.0.0'
